@@ -10,8 +10,7 @@ const usersRouter = require('./routes/users');
 const app = express();
 const mongoose = require('mongoose');
 const mongoDB =
-  'mongodb+srv://faroukhamadi:16/04/2002farouk@cluster0.uaiqu.mongodb.net/local_library?retryWrites=true&w=majority';
-
+  'mongodb+srv://faroukhamadi:16042002farouk@cluster0.uaiqu.mongodb.net/local_library?retryWrites=true&w=majority';
 mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error: '));
@@ -47,3 +46,5 @@ app.use(function (err, req, res, next) {
 });
 
 module.exports = app;
+
+// node populatedb.js mongodb+srv://faroukhamadi:16042002farouk@cluster0.uaiqu.mongodb.net/local_library?retryWrites=true&w=majority
