@@ -10,7 +10,8 @@ const AuthorSchema = new Schema({
 });
 
 // Virtual for author's full name
-AuthorSchema.virtual('name').get(() => {
+// IMPORTANT: Don't use arrow functions when you have 'this'
+AuthorSchema.virtual('name').get(function () {
   // to avoid errors in cases where an author does not have either a family name or first name
   // we want to make sure we handle the exception by returning an empty string for that case
   let fullname = '';
@@ -24,7 +25,7 @@ AuthorSchema.virtual('name').get(() => {
 });
 
 // virtual for author's lifespan
-AuthorSchema.virtual('lifespan').get(() => {
+AuthorSchema.virtual('lifespan').get(function () {
   let lifetime_string = '';
   if (this.date_of_birth) {
     lifetime_string = this.date_of_birth.getYear().toString();
