@@ -42,7 +42,9 @@ AuthorSchema.virtual('lifespan').get(function () {
 });
 
 // Virtual for author's URL
-AuthorSchema.virtual('url').get(() => '/catalog/author/' + this._id);
+AuthorSchema.virtual('url').get(function () {
+  return '/catalog/author/' + this._id;
+});
 
 // Export model
 module.exports = mongoose.model('Author', AuthorSchema);
