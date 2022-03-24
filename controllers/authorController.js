@@ -138,22 +138,24 @@ exports.author_delete_get = (req, res, next) => {
   );
 };
 
-// Handle Author delete on POST
-exports.author_delete_post = (req, res, next) => {
+// Handle Author delete on POST.
+exports.author_delete_post = function (req, res, next) {
   async.parallel(
     {
-      author: (callback) => {
+      author: function (callback) {
         Author.findById(req.body.authorid).exec(callback);
       },
-      authors_books: (callback) => {
+      authors_books: function (callback) {
         Book.find({ author: req.body.authorid }).exec(callback);
       },
     },
-    (err, results) => {
-      if (err) return next(err);
+    function (err, results) {
+      if (err) {
+        return next(err);
+      }
       // Success
-      if (results.author_books.length > 0) {
-        // Author has books. Render in same way as for GET route
+      if (results.authors_books.length > 0) {
+        // Author has books. Render in same way as for GET route.
         res.render('author_delete', {
           title: 'Delete Author',
           author: results.author,
@@ -161,9 +163,11 @@ exports.author_delete_post = (req, res, next) => {
         });
         return;
       } else {
-        // Author has no books. Delete object and redirect to the list of authors
+        // Author has no books. Delete object and redirect to the list of authors.
         Author.findByIdAndRemove(req.body.authorid, function deleteAuthor(err) {
-          if (err) return next(err);
+          if (err) {
+            return next(err);
+          }
           // Success - go to author list
           res.redirect('/catalog/authors');
         });
