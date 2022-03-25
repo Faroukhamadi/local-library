@@ -345,7 +345,7 @@ exports.book_update_post = [
     });
 
     if (!errors.isEmpty()) {
-      // There are errors. Render form again with sanitized values/error messages.
+      // There are errors. Render form again with sanitized values/error messages
 
       // Get all authors and genres for form
       async.parallel(

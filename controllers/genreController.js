@@ -121,7 +121,6 @@ exports.genre_delete_get = function (req, res, next) {
         title: 'Delete Genre',
         genre: results.genre,
         genre_books: results.genres_books,
-        // HACK: dont forget about the naming differences later
       });
     }
   );
@@ -162,11 +161,57 @@ exports.genre_delete_post = function (req, res, next) {
 };
 
 // Display Genre update form on GET.
-exports.genre_update_get = function (req, res) {
-  res.send('NOT IMPLEMENTED: Genre update GET');
+exports.genre_update_get = function (req, res, next) {
+  Genre.findById(req.params.id, (err, genre) => {
+    if (err) return next(err);
+    if (genre === null) {
+      // no results
+      let err = new Error('Genre not found');
+      err.status = 404;
+      return next(err);
+    }
+    // Success.
+    res.render('genre_form', {
+      title: 'Update Genre',
+      genre: genre,
+    });
+  });
 };
 
 // Handle Genre update on POST.
-exports.genre_update_post = function (req, res) {
-  res.send('NOT IMPLEMENTED: Genre update POST');
-};
+exports.genre_update_post = [
+  // Validate and sanitize fields
+  body('name', 'Genre name must contain at least 3 characters')
+    .trim()
+    .isLength({ min: 3 })
+    .escape(),
+
+  // Process request after validation and sanitization
+  (req, res, next) => {
+    // Extract the validation errors from a request
+    const errors = validationResult(req);
+
+    // Create a Genre object with escaped/trimmed data and old id
+    const genre = new Genre({
+      name: req.body.name,
+      _id: req.params.id,
+    });
+
+    if (!errors.isEmpty()) {
+      // There are errors. Render the form again with sanitized values and error messages
+      res.render('genre_form', {
+        title: 'Update Genre',
+        genre: genre,
+        errors: errors.array(),
+      });
+      return;
+    } else {
+      // Data from form is valid. Update the record.
+      Genre.findByIdAndUpdate(req.params.id, genre, {}, (err, thegenre) => {
+        if (err) return next(err);
+        // Successful - redirect to genre detail page.
+        res.redirect(thegenre.url);
+      });
+    }
+  },
+];
