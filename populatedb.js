@@ -12,17 +12,17 @@ if (!userArgs[0].startsWith('mongodb')) {
     return
 }
 */
-var async = require('async');
-var Book = require('./models/book');
-var Author = require('./models/author');
-var Genre = require('./models/genre');
-var BookInstance = require('./models/bookinstance');
+const async = require('async');
+const Book = require('./models/book');
+const Author = require('./models/author');
+const Genre = require('./models/genre');
+const BookInstance = require('./models/bookinstance');
 
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 var mongoDB = userArgs[0];
 mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = global.Promise;
-var db = mongoose.connection;
+const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 var authors = [];
