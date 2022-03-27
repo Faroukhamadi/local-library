@@ -1,3 +1,4 @@
+require('dotenv').config();
 const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
@@ -13,9 +14,7 @@ const app = express();
 app.use(helmet());
 
 const mongoose = require('mongoose');
-const dev_db_url =
-  'mongodb+srv://faroukhamadi:16042002farouk@cluster0.uaiqu.mongodb.net/local_library?retryWrites=true&w=majority';
-const mongoDB = process.env.MONGODB_URI || dev_db_url;
+const mongoDB = process.env.MONGODB_URI || process.env.MONGODB_KEY;
 
 mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
 const db = mongoose.connection;
